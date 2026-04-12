@@ -1,6 +1,6 @@
 # K12 Smart Teacher - 智能老师辅导系统
 
-[![Skill](https://img.shields.io/badge/Skill-k12--smart--teacher-blue)](https://github.com/your-username/k12-smart-teacher)
+[![Skill](https://img.shields.io/badge/Skill-k12--smart--teacher-blue)](https://github.com/shellery1988/k12-smart-teacher)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 
 智能老师辅导系统，用于K12学生的作业批改、错题分析、举一反三练习生成。支持小学、初中、高中全学段，涵盖九大学科。
@@ -36,13 +36,13 @@
 在 WorkBuddy 中执行：
 
 ```
-安装技能：https://github.com/your-username/k12-smart-teacher
+安装技能：https://github.com/shellery1988/k12-smart-teacher
 ```
 
 或手动安装：
 
 ```bash
-git clone https://github.com/your-username/k12-smart-teacher.git ~/.workbuddy/skills/k12-smart-teacher
+git clone https://github.com/shellery1988/k12-smart-teacher.git ~/.workbuddy/skills/k12-smart-teacher
 cd ~/.workbuddy/skills/k12-smart-teacher
 python3 scripts/quick_setup.py
 ```
@@ -52,13 +52,13 @@ python3 scripts/quick_setup.py
 在 OpenClaw 中执行：
 
 ```
-安装技能：https://github.com/your-username/k12-smart-teacher
+安装技能：https://github.com/shellery1988/k12-smart-teacher
 ```
 
 或手动安装：
 
 ```bash
-git clone https://github.com/your-username/k12-smart-teacher.git ~/.openclaw/skills/k12-smart-teacher
+git clone https://github.com/shellery1988/k12-smart-teacher.git ~/.openclaw/skills/k12-smart-teacher
 cd ~/.openclaw/skills/k12-smart-teacher
 python3 scripts/quick_setup.py
 ```
@@ -68,13 +68,13 @@ python3 scripts/quick_setup.py
 在 ClaudeCode 中执行：
 
 ```
-安装技能：https://github.com/your-username/k12-smart-teacher
+安装技能：https://github.com/shellery1988/k12-smart-teacher
 ```
 
 或手动安装：
 
 ```bash
-git clone https://github.com/your-username/k12-smart-teacher.git ~/.claudecode/skills/k12-smart-teacher
+git clone https://github.com/shellery1988/k12-smart-teacher.git ~/.claudecode/skills/k12-smart-teacher
 cd ~/.claudecode/skills/k12-smart-teacher
 python3 scripts/quick_setup.py
 ```
@@ -85,7 +85,7 @@ python3 scripts/quick_setup.py
 
 ```bash
 # 1. 克隆仓库
-git clone https://github.com/your-username/k12-smart-teacher.git
+git clone https://github.com/shellery1988/k12-smart-teacher.git
 
 # 2. 复制到对应工具的技能目录
 # WorkBuddy: cp -r k12-smart-teacher ~/.workbuddy/skills/
