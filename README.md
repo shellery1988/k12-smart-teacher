@@ -29,7 +29,9 @@
 
 ## 🚀 快速安装
 
-### 方法一：WorkBuddy 安装（推荐）
+本技能支持多种AI开发工具安装，选择适合你的方式：
+
+### 方法一：WorkBuddy 安装
 
 在 WorkBuddy 中执行：
 
@@ -37,19 +39,73 @@
 安装技能：https://github.com/your-username/k12-smart-teacher
 ```
 
-### 方法二：手动安装
+或手动安装：
 
 ```bash
-# 克隆仓库
-git clone https://github.com/your-username/k12-smart-teacher.git
-
-# 复制到技能目录
-cp -r k12-smart-teacher ~/.workbuddy/skills/
-
-# 安装依赖
+git clone https://github.com/your-username/k12-smart-teacher.git ~/.workbuddy/skills/k12-smart-teacher
 cd ~/.workbuddy/skills/k12-smart-teacher
 python3 scripts/quick_setup.py
 ```
+
+### 方法二：OpenClaw 安装
+
+在 OpenClaw 中执行：
+
+```
+安装技能：https://github.com/your-username/k12-smart-teacher
+```
+
+或手动安装：
+
+```bash
+git clone https://github.com/your-username/k12-smart-teacher.git ~/.openclaw/skills/k12-smart-teacher
+cd ~/.openclaw/skills/k12-smart-teacher
+python3 scripts/quick_setup.py
+```
+
+### 方法三：ClaudeCode 安装
+
+在 ClaudeCode 中执行：
+
+```
+安装技能：https://github.com/your-username/k12-smart-teacher
+```
+
+或手动安装：
+
+```bash
+git clone https://github.com/your-username/k12-smart-teacher.git ~/.claudecode/skills/k12-smart-teacher
+cd ~/.claudecode/skills/k12-smart-teacher
+python3 scripts/quick_setup.py
+```
+
+### 方法四：通用手动安装
+
+适用于任何支持技能系统的AI工具：
+
+```bash
+# 1. 克隆仓库
+git clone https://github.com/your-username/k12-smart-teacher.git
+
+# 2. 复制到对应工具的技能目录
+# WorkBuddy: cp -r k12-smart-teacher ~/.workbuddy/skills/
+# OpenClaw:  cp -r k12-smart-teacher ~/.openclaw/skills/
+# ClaudeCode: cp -r k12-smart-teacher ~/.claudecode/skills/
+
+# 3. 安装依赖
+cd k12-smart-teacher
+python3 scripts/quick_setup.py
+```
+
+### 📊 安装方式对比
+
+| 平台 | 安装命令 | 技能目录 | 状态 |
+|------|---------|---------|------|
+| **WorkBuddy** | `安装技能：URL` | `~/.workbuddy/skills/` | ✅ 完全支持 |
+| **OpenClaw** | `安装技能：URL` | `~/.openclaw/skills/` | ✅ 完全支持 |
+| **ClaudeCode** | `安装技能：URL` | `~/.claudecode/skills/` | ✅ 完全支持 |
+
+**所有平台功能完全一致，依赖自动安装，开箱即用！**
 
 ## 📖 使用指南
 
@@ -112,21 +168,30 @@ k12-smart-teacher/
 
 ## 🎯 核心特性
 
-### 1. 智能识别学科和年级
+### 1. 多平台支持
+
+本技能支持多种AI开发工具：
+- ✅ **WorkBuddy** - 腾讯云AI助手
+- ✅ **OpenClaw** - 开源AI开发平台
+- ✅ **ClaudeCode** - Anthropic官方开发工具
+
+所有平台功能完全一致，一键安装即可使用。
+
+### 2. 智能识别学科和年级
 
 系统会根据试题内容自动判断学科和年级：
 - 分析试题特征（公式、文字、符号等）
 - 匹配学科特征库
 - 根据难度推断年级
 
-### 2. 可视化讲解
+### 3. 可视化讲解
 
 避免枯燥的文字说明，使用生动有趣的方式讲解：
 - 图形化展示（流程图、对比图）
 - 漫画式讲解（角色对话、故事情节）
 - 动画效果（翻页式、渐进展示）
 
-### 3. 视频资源推荐
+### 4. 视频资源推荐
 
 自动搜索并推荐优质解题视频：
 - B站（bilibili）
@@ -134,14 +199,14 @@ k12-smart-teacher/
 - 洋葱学园
 - 猿辅导
 
-### 4. 专业梯度练习
+### 5. 专业梯度练习
 
 每套练习包含三个层次：
 - 🟢 基础巩固（最多3题）
 - 🟠 能力提高（最多3题）
 - 🟣 拓展挑战（最多2题）
 
-### 5. 学习报告生成
+### 6. 学习报告生成
 
 - 单次练习报告
 - 阶段总结报告
