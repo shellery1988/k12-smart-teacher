@@ -107,6 +107,17 @@ python3 scripts/quick_setup.py
 
 **所有平台功能完全一致，依赖自动安装，开箱即用！**
 
+## 🌐 仓库地址
+
+本技能同时发布在以下平台：
+
+| 平台 | 仓库地址 | 适用地区 |
+|------|---------|---------|
+| **GitHub** | https://github.com/shellery1988/k12-smart-teacher | 全球访问 |
+| **GitCode** | https://gitcode.com/shellery1988/k12-smart-teacher | 国内访问 |
+
+**国内用户推荐使用GitCode，访问速度更快！**
+
 ## 📖 使用指南
 
 ### 首次使用
