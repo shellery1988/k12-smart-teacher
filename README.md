@@ -278,6 +278,13 @@ k12-smart-teacher/
 - 猿辅导
 - 腾讯课堂
 
+## 👤 联系方式
+
+如有问题或建议，欢迎联系：
+
+- 📧 **邮箱**：shelleryliu@163.com
+- 💬 **微信**：naskfcode
+
 ---
 
 **Made with ❤️ for K12 Education**
