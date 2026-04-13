@@ -118,6 +118,25 @@ python3 scripts/quick_setup.py
 
 **国内用户推荐使用GitCode，访问速度更快！**
 
+## 📸 产品截图
+
+### 练习试卷示例
+![练习试卷示例](assets/screenshots/练习试卷_00.png)
+
+**专业梯度设计**：
+- 🟢 基础巩固题（绿色标识）
+- 🟠 能力提高题（橙色标识）
+- 🟣 拓展挑战题（紫色标识）
+
+### 错题讲解示例
+![错题讲解示例](assets/screenshots/讲解截图.png)
+
+**可视化讲解特色**：
+- 🎨 图形化展示解题过程
+- 📺 推荐优质学习视频
+- 💡 生活化类比帮助理解
+- 🎯 分步骤清晰讲解
+
 ## 📖 使用指南
 
 ### 首次使用
@@ -174,7 +193,10 @@ k12-smart-teacher/
 │   ├── subject_identification.md   # 学科识别指南
 │   └── video_resources.md          # 视频资源指南
 └── assets/                         # 资源文件目录
-    └── paper_template.js           # 试卷模板
+    ├── paper_template.js           # 试卷模板
+    └── screenshots/                # 产品截图目录
+        ├── 练习试卷_00.png          # 练习试卷示例
+        └── 讲解截图.png              # 错题讲解示例
 ```
 
 ## 🎯 核心特性
