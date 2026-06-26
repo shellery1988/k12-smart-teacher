@@ -21,6 +21,17 @@ LEVELS = [
     ("improve", "能力提高", "⭐⭐"),
     ("challenge", "拓展挑战", "⭐⭐⭐"),
 ]
+EXAMPLE_TOPICS = {
+    "语文": ["阅读理解", "病句修改", "作文提纲"],
+    "数学": ["最大公因数", "分数应用题", "一次函数"],
+    "英语": ["现在完成时", "一般过去时", "阅读理解"],
+    "物理": ["浮力", "欧姆定律", "牛顿第二定律"],
+    "化学": ["化学方程式", "酸碱盐", "质量守恒定律"],
+    "生物": ["细胞结构", "遗传规律", "生态系统"],
+    "历史": ["辛亥革命", "工业革命", "抗日战争"],
+    "地理": ["气候类型", "经纬网", "人口迁移"],
+    "政治": ["公民权利", "法治观念", "经济生活"],
+}
 
 
 class PaperGenerationError(Exception):
@@ -57,6 +68,10 @@ def q(qtype, content, answer="", hint=""):
     if hint:
         item["hint"] = hint
     return item
+
+
+def topic_has(topic, *keywords):
+    return any(keyword.lower() in topic.lower() for keyword in keywords)
 
 
 def trim_questions(questions, basic_count, improve_count, challenge_count):
@@ -106,6 +121,44 @@ def generate_math_questions(topic, grade, basic_count=3, improve_count=3, challe
 
 
 def generate_chinese_questions(topic, grade, basic_count=3, improve_count=3, challenge_count=2):
+    if topic_has(topic, "阅读", "现代文"):
+        questions = {
+            "basic": [
+                q("信息提取", "阅读短文后，用一句话概括主要内容，并圈出文中最能支持答案的一句话。", "评分要点：人物/对象、事件、结果要完整。"),
+                q("词语理解", "解释文中一个关键词在语境中的意思，不能只写字典义。", "评分要点：联系上下文解释。"),
+                q("中心判断", "判断文章主要表达的情感或观点，并写出两处依据。", "评分要点：观点明确，依据来自原文。"),
+            ],
+            "improve": [
+                q("句子赏析", "从修辞、动词或描写角度赏析一个句子，按“手法+内容+效果”作答。", "示例框架：这句话运用了……，写出了……，表现了……。"),
+                q("人物分析", "结合两处细节分析人物特点，不能只写形容词。", "评分要点：特点+细节+解释。"),
+                q("标题作用", "分析标题的作用，至少从内容、线索、情感中选择两点回答。"),
+            ],
+            "challenge": [
+                q("开放表达", "联系文章主题和生活实际，写一段80字左右的阅读感悟。", "评分要点：扣主题、有例子、有观点。"),
+                q("迁移仿写", "仿照文中一个有表现力的句式写两句话，主题保持一致。"),
+            ],
+        }
+        return trim_questions(questions, basic_count, improve_count, challenge_count)
+
+    if topic_has(topic, "病句"):
+        questions = {
+            "basic": [
+                q("成分残缺", "修改病句：通过这次阅读活动，使我明白了坚持的重要。", "删去“通过”或“使”。"),
+                q("搭配不当", "修改病句：同学们的学习态度和成绩都有了很大提高。", "“态度”应改为“端正”，或拆成两句。"),
+                q("语序不当", "修改病句：我们认真讨论并听取了老师的建议。", "听取并讨论。"),
+            ],
+            "improve": [
+                q("病因判断", "指出病句类型并修改：能否认真审题，是考试取得好成绩的关键。", "两面对一面；删去“能否”。"),
+                q("综合修改", "找出这段话中的两处语病，并说明修改理由。"),
+                q("表达优化", "把一个口语化句子改成书面表达，保持原意不变。"),
+            ],
+            "challenge": [
+                q("段落修改", "修改一段含有语序、搭配、重复三类问题的小短文，并标注修改点。"),
+                q("命题训练", "自己编写3个病句，分别对应成分残缺、搭配不当、语序不当，并给出答案。"),
+            ],
+        }
+        return trim_questions(questions, basic_count, improve_count, challenge_count)
+
     questions = {
         "basic": [
             q("字词积累", f"围绕“{topic}”整理 5 个关键词，分别写出意思或近义词。"),
@@ -126,6 +179,44 @@ def generate_chinese_questions(topic, grade, basic_count=3, improve_count=3, cha
 
 
 def generate_english_questions(topic, grade, basic_count=3, improve_count=3, challenge_count=2):
+    if topic_has(topic, "现在完成时", "present perfect"):
+        questions = {
+            "basic": [
+                q("Choose", "I ____ my homework already.\nA. finish  B. finished  C. have finished  D. am finishing", "C", "already 常和现在完成时连用。"),
+                q("Fill in", "She has ____ (live) in Beijing for three years.", "lived"),
+                q("Transform", "He came here in 2022. 改写为现在完成时：He ____ ____ here since 2022.", "has been"),
+            ],
+            "improve": [
+                q("Correction", "改错：I have bought this bike for two years.", "bought -> had 或改为 I bought this bike two years ago.", "延续时间要用延续性动词。"),
+                q("Since/For", "用 since 或 for 填空：\n（1）____ last Monday  （2）____ two weeks  （3）____ 2020", "since；for；since"),
+                q("Sentence", "用 have/has done 写3句关于自己学习经历的句子，每句包含 already、yet 或 ever 中的一个。"),
+            ],
+            "challenge": [
+                q("Writing", "写一段60词左右的小短文，介绍你最近完成的一件事，至少使用3处现在完成时。"),
+                q("Compare", "比较 I went to Shanghai. 和 I have been to Shanghai. 的意思差别，并各造一句。"),
+            ],
+        }
+        return trim_questions(questions, basic_count, improve_count, challenge_count)
+
+    if topic_has(topic, "一般过去时", "past tense"):
+        questions = {
+            "basic": [
+                q("Fill in", "Yesterday I ____ (visit) my grandparents.", "visited"),
+                q("Choose", "She ____ to school by bike last week.\nA. goes  B. went  C. has gone", "B"),
+                q("Negative", "Tom watched TV last night. 改为否定句。", "Tom didn't watch TV last night."),
+            ],
+            "improve": [
+                q("Question", "They played football after school. 改为一般疑问句并作肯定回答。", "Did they play football after school? Yes, they did."),
+                q("Timeline", "根据 yesterday、last Sunday、two days ago 各写一个一般过去时句子。"),
+                q("Correction", "改错：Did you went to the park?", "went -> go"),
+            ],
+            "challenge": [
+                q("Writing", "写一段80词左右日记，描述上周末做的三件事。"),
+                q("Compare", "比较一般过去时和现在完成时的区别，并各举一个例句。"),
+            ],
+        }
+        return trim_questions(questions, basic_count, improve_count, challenge_count)
+
     questions = {
         "basic": [
             q("Vocabulary", f"Write 5 words or phrases about '{topic}' and give one Chinese meaning for each."),
@@ -146,6 +237,63 @@ def generate_english_questions(topic, grade, basic_count=3, improve_count=3, cha
 
 
 def generate_science_questions(subject, topic, grade, basic_count=3, improve_count=3, challenge_count=2):
+    if subject == "物理" and topic_has(topic, "浮力"):
+        questions = {
+            "basic": [
+                q("概念填空", "浸在液体中的物体受到液体对它向上的力，这个力叫（　　）。", "浮力"),
+                q("公式应用", "阿基米德原理公式可写为 F浮 = （　　）。", "G排 或 ρ液gV排"),
+                q("判断", "物体漂浮时，浮力一定等于重力。（　　）", "√"),
+            ],
+            "improve": [
+                q("计算", "一个物体排开水的体积为 2×10^-4 m³，水的密度为 1.0×10³ kg/m³，g取10 N/kg，求浮力。", "2 N"),
+                q("现象分析", "为什么轮船是钢铁做的却能浮在水面上？", "关键：做成空心后排开水的体积增大，浮力可等于重力。"),
+                q("实验探究", "用弹簧测力计测物体在空气中和水中的示数，如何求浮力？", "空气中示数 - 水中示数。"),
+            ],
+            "challenge": [
+                q("综合分析", "同一木块分别漂浮在清水和盐水中，哪种液体中露出水面的体积更大？说明理由。", "盐水中更大；密度更大，需要排开更小体积即可平衡重力。"),
+                q("变量控制", "设计实验探究浮力大小是否与液体密度有关，写出控制变量和改变变量。"),
+            ],
+        }
+        return trim_questions(questions, basic_count, improve_count, challenge_count)
+
+    if subject == "化学" and topic_has(topic, "化学方程式", "方程式"):
+        questions = {
+            "basic": [
+                q("配平", "配平：__H2 + __O2 = __H2O", "2H2 + O2 = 2H2O"),
+                q("判断", "化学方程式配平的依据是质量守恒定律。（　　）", "√"),
+                q("意义说明", "说出化学方程式 2H2 + O2 = 2H2O 表示的两层含义。", "反应物/生成物；粒子个数比或物质的量关系。"),
+            ],
+            "improve": [
+                q("配平", "配平：__Fe + __O2 = __Fe3O4", "3Fe + 2O2 = Fe3O4"),
+                q("纠错", "判断并修改：H2 + O2 = H2O2 可以表示氢气燃烧生成水。", "错误；生成水应为 2H2 + O2 = 2H2O。"),
+                q("步骤说明", "写出配平化学方程式的三步：写反应式、配平、检查。"),
+            ],
+            "challenge": [
+                q("综合配平", "配平并说明依据：__KMnO4 = __K2MnO4 + __MnO2 + __O2", "2KMnO4 = K2MnO4 + MnO2 + O2"),
+                q("质量关系", "根据 2H2 + O2 = 2H2O，说明4份质量氢气完全反应需要多少份质量氧气。", "32份质量氧气"),
+            ],
+        }
+        return trim_questions(questions, basic_count, improve_count, challenge_count)
+
+    if subject == "生物" and topic_has(topic, "细胞"):
+        questions = {
+            "basic": [
+                q("结构识别", "写出植物细胞特有的三个结构。", "细胞壁、液泡、叶绿体"),
+                q("功能匹配", "细胞核的主要作用是什么？", "控制生命活动，储存遗传信息。"),
+                q("判断", "动物细胞和植物细胞都有细胞膜、细胞质、细胞核。（　　）", "√"),
+            ],
+            "improve": [
+                q("比较表", "用表格比较动物细胞和植物细胞的相同点与不同点。"),
+                q("显微观察", "制作临时装片时为什么要滴清水或生理盐水？", "保持细胞正常形态。"),
+                q("易错辨析", "为什么说细胞膜不是一堵完全封闭的墙？", "它能控制物质进出。"),
+            ],
+            "challenge": [
+                q("结构与功能", "从结构适应功能角度说明叶绿体、线粒体分别为什么重要。"),
+                q("实验设计", "设计一个观察洋葱表皮细胞的实验流程，并写出注意事项。"),
+            ],
+        }
+        return trim_questions(questions, basic_count, improve_count, challenge_count)
+
     unit = {
         "物理": ("概念/公式", "实验或现象", "单位和条件"),
         "化学": ("概念/方程式", "实验现象", "反应条件和守恒"),
@@ -171,6 +319,63 @@ def generate_science_questions(subject, topic, grade, basic_count=3, improve_cou
 
 
 def generate_humanities_questions(subject, topic, grade, basic_count=3, improve_count=3, challenge_count=2):
+    if subject == "历史" and topic_has(topic, "辛亥革命"):
+        questions = {
+            "basic": [
+                q("时间人物", "写出辛亥革命爆发的年份和重要领导人物。", "1911年；孙中山等。"),
+                q("概念理解", "辛亥革命推翻了什么制度？", "清王朝统治和君主专制制度。"),
+                q("判断", "辛亥革命使民主共和观念深入人心。（　　）", "√"),
+            ],
+            "improve": [
+                q("原因分析", "从民族危机、清政府统治、革命思想传播中任选两点说明辛亥革命原因。"),
+                q("影响分析", "说明辛亥革命的积极影响和局限性各一点。"),
+                q("史料题", "阅读一段关于《中华民国临时约法》的材料，概括其体现的政治理念。", "民主共和、主权在民、限制权力等。"),
+            ],
+            "challenge": [
+                q("评价题", "如何理解辛亥革命“既成功又失败”？请分两方面回答。"),
+                q("比较题", "比较洋务运动、戊戌变法、辛亥革命在救国方式上的不同。"),
+            ],
+        }
+        return trim_questions(questions, basic_count, improve_count, challenge_count)
+
+    if subject == "地理" and topic_has(topic, "气候"):
+        questions = {
+            "basic": [
+                q("要素填空", "气候主要从（　　）和（　　）两个方面描述。", "气温；降水"),
+                q("读图方法", "判断气候类型时，先看气温判断温度带，再看降水判断干湿季节。这个方法是否正确？", "正确"),
+                q("概念辨析", "天气和气候有什么区别？", "天气时间短、变化快；气候时间长、较稳定。"),
+            ],
+            "improve": [
+                q("类型判断", "某地全年高温多雨，最可能是什么气候类型？", "热带雨林气候"),
+                q("成因分析", "为什么我国东部季风区夏季降水较多？", "受夏季风影响，来自海洋的湿润气流带来降水。"),
+                q("图表题", "给一张气温曲线和降水柱状图，写出判读三步。", "看最冷月气温；看降水总量；看降水季节分配。"),
+            ],
+            "challenge": [
+                q("区域比较", "比较温带季风气候和温带海洋性气候的气温、降水差异。"),
+                q("生活联系", "说明气候对农业生产或民居形态的一种影响。"),
+            ],
+        }
+        return trim_questions(questions, basic_count, improve_count, challenge_count)
+
+    if subject == "政治" and topic_has(topic, "公民权利", "权利"):
+        questions = {
+            "basic": [
+                q("概念填空", "公民行使权利时，不得损害国家的、社会的、集体的利益和其他公民的合法权利。（　　）", "√"),
+                q("列举", "列举两项公民基本权利。", "选举权和被选举权、受教育权、劳动权、人身自由等。"),
+                q("判断", "权利和义务是完全分开的，享有权利就不用履行义务。（　　）", "×"),
+            ],
+            "improve": [
+                q("情境分析", "同学在网络上随意发布他人照片并嘲笑，对方可以怎样维权？", "要求删除、赔礼道歉；必要时寻求老师、家长或法律帮助。"),
+                q("做法题", "当自己的受教育权受到侵犯时，可以采取哪些合理方式？"),
+                q("辨析题", "有人说“言论自由就是想说什么就说什么”。请辨析。", "错误；自由有边界，不能侵犯他人和公共利益。"),
+            ],
+            "challenge": [
+                q("材料分析", "结合一个校园或网络生活案例，说明如何依法行使权利。"),
+                q("观点表达", "围绕“权利与义务相统一”写一段120字左右的小论述。"),
+            ],
+        }
+        return trim_questions(questions, basic_count, improve_count, challenge_count)
+
     focus = {
         "历史": ("时间、人物、事件", "原因和影响", "史料"),
         "地理": ("位置、气候、地形", "成因和影响", "地图或数据"),
@@ -223,7 +428,7 @@ def build_output_data(args, questions):
         "grade": args.grade,
         "stage": detect_stage(args.grade),
         "questions": questions,
-        "usage_note": "题目为基础模板生成，正式给孩子使用前建议老师或家长快速浏览一遍。"
+        "usage_note": "数学和常见知识点会优先使用专项模板；其他主题使用基础模板生成，正式给孩子使用前建议老师或家长快速浏览一遍。"
     }
 
 
@@ -334,20 +539,36 @@ def positive_int(value):
     return number
 
 
+def format_examples():
+    lines = ["当前内置专项/推荐主题示例："]
+    for subject in SUPPORTED_SUBJECTS:
+        lines.append(f"- {subject}：{'、'.join(EXAMPLE_TOPICS[subject])}")
+    lines.append("")
+    lines.append("示例命令：")
+    lines.append("python3 scripts/generate_paper.py --subject 物理 --topic 浮力 --student 小明 --grade 初二 --output 浮力练习.md")
+    return "\n".join(lines)
+
+
 def parse_args(argv):
     parser = FriendlyArgumentParser(
         description="生成K12三层练习题（支持九大学科，输出 docx/md/json）",
         epilog="示例：python3 scripts/generate_paper.py --subject 数学 --topic 最大公因数 --student 小明 --grade 五年级 --output 练习/小明.docx",
     )
-    parser.add_argument("--subject", required=True, help=f"学科：{'、'.join(SUPPORTED_SUBJECTS)}")
-    parser.add_argument("--topic", required=True, help="知识点主题，例如：最大公因数、阅读理解、现在完成时")
-    parser.add_argument("--student", required=True, help="学生姓名")
-    parser.add_argument("--grade", required=True, help="年级，例如：小学五年级、初二、高一")
-    parser.add_argument("--output", required=True, help="输出文件路径，支持 .docx/.md/.json")
+    parser.add_argument("--list-examples", action="store_true", help="列出当前内置专项/推荐主题示例")
+    parser.add_argument("--subject", help=f"学科：{'、'.join(SUPPORTED_SUBJECTS)}")
+    parser.add_argument("--topic", help="知识点主题，例如：最大公因数、阅读理解、现在完成时")
+    parser.add_argument("--student", help="学生姓名")
+    parser.add_argument("--grade", help="年级，例如：小学五年级、初二、高一")
+    parser.add_argument("--output", help="输出文件路径，支持 .docx/.md/.json")
     parser.add_argument("--basic-count", type=positive_int, default=3, help="基础巩固题数量，默认3")
     parser.add_argument("--improve-count", type=positive_int, default=3, help="能力提高题数量，默认3")
     parser.add_argument("--challenge-count", type=positive_int, default=2, help="拓展挑战题数量，默认2")
     args = parser.parse_args(argv)
+    if args.list_examples:
+        return args
+    missing = [name for name in ["subject", "topic", "student", "grade", "output"] if not getattr(args, name)]
+    if missing:
+        raise PaperGenerationError(f"缺少必要参数：{', '.join('--' + name.replace('_', '-') for name in missing)}。可先运行 --list-examples 查看示例。")
     if args.subject not in SUPPORTED_SUBJECTS:
         raise PaperGenerationError(f"暂不支持“{args.subject}”。可用学科：{'、'.join(SUPPORTED_SUBJECTS)}。")
     return args
@@ -356,6 +577,9 @@ def parse_args(argv):
 def main(argv=None):
     try:
         args = parse_args(argv or sys.argv[1:])
+        if args.list_examples:
+            print(format_examples())
+            return 0
         args.topic = normalize_text(args.topic, "综合复习")
         args.student = normalize_text(args.student, "同学")
         args.grade = normalize_text(args.grade, "未提供年级")

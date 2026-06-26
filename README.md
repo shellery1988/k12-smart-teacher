@@ -1,11 +1,20 @@
 # K12 Smart Teacher - 智能老师辅导系统
 
 [![Skill](https://img.shields.io/badge/Skill-k12--smart--teacher-blue)](https://skillhub.cn)
-[![Version](https://img.shields.io/badge/Version-1.0.1-brightgreen)](https://skillhub.cn)
+[![Version](https://img.shields.io/badge/Version-1.0.2-brightgreen)](https://skillhub.cn)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-WorkBuddy%20%7C%20OpenClaw%20%7C%20ClaudeCode-orange)](https://skillhub.cn)
 
-> K12智能老师辅导系统，支持作业批改、错题分析、可视化讲解、举一反三练习生成。覆盖小学/初中/高中全学段，九大学科。数学专项题库更丰富，其他学科提供基础模板练习，可按教材和错题继续细化。
+> K12智能老师辅导系统，支持作业批改、错题分析、可视化讲解、举一反三练习生成。覆盖小学/初中/高中全学段，九大学科。数学专项题库更丰富，英语现在完成时、物理浮力、化学方程式、生物细胞、历史辛亥革命、地理气候、政治公民权利等常见主题已提供专项练习模板。
+
+---
+
+## 先看这里：核心规则
+
+1. **先讲懂，再练习**：不要直接甩题目；先讲错因、方法和例子。
+2. **必须推荐视频**：错题讲解后推荐1-2个国内平台学习视频；搜索失败时给B站关键词。
+3. **文档失败不崩溃**：Word生成失败时自动给Markdown版。
+4. **看不清就追问**：题图模糊或教材版本影响答案时，先说明缺什么，再给可复制补充话术。
 
 ---
 
@@ -36,9 +45,9 @@
 | 学科 | 当前能力 |
 |------|----------|
 | 数学 | 专项题更丰富，最大公因数等知识点可直接生成带答案练习 |
-| 语文/英语 | 支持字词、阅读、语法、写作等基础模板练习 |
-| 物理/化学/生物 | 支持概念、实验、现象分析、探究题模板 |
-| 历史/地理/政治 | 支持材料分析、概念梳理、开放表达模板 |
+| 语文/英语 | 阅读理解、病句修改、现在完成时、一般过去时等主题有专项模板 |
+| 物理/化学/生物 | 浮力、化学方程式、细胞结构等主题有专项模板 |
+| 历史/地理/政治 | 辛亥革命、气候类型、公民权利等主题有专项模板 |
 
 > 想要更贴合教材，请补充：年级、教材版本、章节名、错题照片或原题文字。
 
@@ -137,6 +146,12 @@ python3 scripts/generate_paper.py \
   --student 小明 \
   --grade 五年级 \
   --output 练习/小明-最大公因数.docx
+```
+
+查看内置专项/推荐主题：
+
+```bash
+python3 scripts/generate_paper.py --list-examples
 ```
 
 支持输出：
