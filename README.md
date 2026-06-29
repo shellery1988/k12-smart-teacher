@@ -1,7 +1,7 @@
 # K12 Smart Teacher - 智能老师辅导系统
 
 [![Skill](https://img.shields.io/badge/Skill-k12--smart--teacher-blue)](https://skillhub.cn)
-[![Version](https://img.shields.io/badge/Version-1.0.3-brightgreen)](https://skillhub.cn)
+[![Version](https://img.shields.io/badge/Version-1.0.4-brightgreen)](https://skillhub.cn)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-WorkBuddy%20%7C%20OpenClaw%20%7C%20ClaudeCode-orange)](https://skillhub.cn)
 
@@ -11,7 +11,7 @@
 
 ## 先看这里：核心规则
 
-快速使用请先看 [QUICKSTART.md](QUICKSTART.md)，完整教学规则再看 [SKILL.md](SKILL.md)。
+快速使用请先看 [QUICKSTART.md](QUICKSTART.md)，输出文件样例看 [OUTPUT_EXAMPLES.md](OUTPUT_EXAMPLES.md)，排障看 [FAQ.md](FAQ.md)，完整教学规则再看 [SKILL.md](SKILL.md)。
 
 1. **先讲懂，再练习**：不要直接甩题目；先讲错因、方法和例子。
 2. **必须推荐视频**：错题讲解后推荐1-2个国内平台学习视频；搜索失败时给B站关键词。
@@ -130,6 +130,8 @@ cd k12-smart-teacher && python3 scripts/quick_setup.py
 k12-smart-teacher/
 ├── SKILL.md                    # 核心技能指令文档
 ├── QUICKSTART.md               # 快速索引：触发话术、均衡主题、常见问题
+├── OUTPUT_EXAMPLES.md          # 输出文件示例：Markdown/JSON/Word降级
+├── FAQ.md                      # 常见问题与排障
 ├── README.md                   # 项目说明（本文件）
 ├── LICENSE                     # MIT 许可证
 ├── scripts/
@@ -170,6 +172,8 @@ python3 scripts/generate_paper.py --list-examples
 
 如果 `.docx` 依赖不可用，脚本会自动生成同名 `.md` 文件，并给出中文提示。
 
+完整文件示例见 [OUTPUT_EXAMPLES.md](OUTPUT_EXAMPLES.md)。
+
 ---
 
 ## 🛠️ 依赖说明
@@ -188,11 +192,10 @@ python3 scripts/quick_setup.py
 
 ## ❓ 常见问题
 
+更完整的问题处理见 [FAQ.md](FAQ.md)。
+
 **Q：生成Word失败怎么办？**  
 A：脚本会自动降级生成Markdown。需要Word时，先运行 `python3 scripts/quick_setup.py` 安装依赖。
-
-**Q：为什么语文/英语/物理题比较通用？**  
-A：这些学科目前提供基础模板。补充教材版本、课文、章节或错题原文后，可以改写成更贴合的练习。
 
 **Q：视频推荐打不开怎么办？**  
 A：优先推荐国内平台。若搜索失败，会提供B站可复制关键词，方便手动查找。

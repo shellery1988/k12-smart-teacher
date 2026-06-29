@@ -2,7 +2,7 @@
 name: k12-smart-teacher
 slug: k12-smart-teacher
 displayName: K12智能老师
-version: 1.0.3
+version: 1.0.4
 description: K12智能老师辅导系统，支持作业批改、错题分析、举一反三练习生成。覆盖小学/初中/高中全学段，语文/数学/英语/物理/化学/生物/历史/地理/政治九大学科；每科内置4个高频主题，统一生成基础/提高/挑战三层练习。可生成Markdown/JSON练习文件，安装python-docx后可生成Word文档。
 namespace: global
 allowed-tools: Read,Write,Bash,WebSearch
@@ -29,6 +29,16 @@ license: MIT
 4. **信息不足先补齐**：图片模糊、教材版本关键、题目缺失时，先给用户一条可复制的补充话术。
 5. **九科均衡发展**：每科都从 `references/balanced_topic_bank.json` 读取4个高频主题；其他主题先生成基础模板，再提示可按教材或原题继续细化。
 
+## 文档导航
+
+| 想解决的问题 | 先看哪个文件 |
+|--------------|--------------|
+| 不知道怎么开口用 | `QUICKSTART.md` |
+| 想知道生成文件长什么样 | `OUTPUT_EXAMPLES.md` |
+| Word失败、图片模糊、视频搜不到 | `FAQ.md` |
+| 想扩展九科学科主题 | `references/balanced_topic_bank.json` |
+| 想看完整教学流程和约束 | 本文件 `SKILL.md` |
+
 ## 概述
 
 此技能是一个完整的K12智能辅导系统，能够：
@@ -47,6 +57,9 @@ license: MIT
 - 九大学科均衡主题表
 - 练习文件生成命令
 - Word失败、图片模糊、主题不在内置列表时的处理办法
+
+如果用户问“生成后是什么文件、长什么样”，优先查看 `OUTPUT_EXAMPLES.md`。
+如果用户问“失败了怎么办”，优先查看 `FAQ.md`。
 
 ## 支持范围
 
