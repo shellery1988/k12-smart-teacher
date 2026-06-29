@@ -1,15 +1,17 @@
 # K12 Smart Teacher - 智能老师辅导系统
 
 [![Skill](https://img.shields.io/badge/Skill-k12--smart--teacher-blue)](https://skillhub.cn)
-[![Version](https://img.shields.io/badge/Version-1.0.2-brightgreen)](https://skillhub.cn)
+[![Version](https://img.shields.io/badge/Version-1.0.3-brightgreen)](https://skillhub.cn)
 [![License](https://img.shields.io/badge/License-MIT-green)](LICENSE)
 [![Platform](https://img.shields.io/badge/Platform-WorkBuddy%20%7C%20OpenClaw%20%7C%20ClaudeCode-orange)](https://skillhub.cn)
 
-> K12智能老师辅导系统，支持作业批改、错题分析、可视化讲解、举一反三练习生成。覆盖小学/初中/高中全学段，九大学科。数学专项题库更丰富，英语现在完成时、物理浮力、化学方程式、生物细胞、历史辛亥革命、地理气候、政治公民权利等常见主题已提供专项练习模板。
+> K12智能老师辅导系统，支持作业批改、错题分析、可视化讲解、举一反三练习生成。覆盖小学/初中/高中全学段，九大学科。每个学科都内置4个高频主题，统一生成基础/提高/挑战三层练习，避免只偏重某一科。
 
 ---
 
 ## 先看这里：核心规则
+
+快速使用请先看 [QUICKSTART.md](QUICKSTART.md)，完整教学规则再看 [SKILL.md](SKILL.md)。
 
 1. **先讲懂，再练习**：不要直接甩题目；先讲错因、方法和例子。
 2. **必须推荐视频**：错题讲解后推荐1-2个国内平台学习视频；搜索失败时给B站关键词。
@@ -42,12 +44,17 @@
 
 ### 学科覆盖与当前能力
 
-| 学科 | 当前能力 |
-|------|----------|
-| 数学 | 专项题更丰富，最大公因数等知识点可直接生成带答案练习 |
-| 语文/英语 | 阅读理解、病句修改、现在完成时、一般过去时等主题有专项模板 |
-| 物理/化学/生物 | 浮力、化学方程式、细胞结构等主题有专项模板 |
-| 历史/地理/政治 | 辛亥革命、气候类型、公民权利等主题有专项模板 |
+| 学科 | 内置均衡主题 |
+|------|--------------|
+| 语文 | 阅读理解、病句修改、古诗词鉴赏、作文提纲 |
+| 数学 | 最大公因数、分数应用题、一次函数、二次函数 |
+| 英语 | 现在完成时、一般过去时、阅读理解、被动语态 |
+| 物理 | 浮力、欧姆定律、牛顿第二定律、光的反射 |
+| 化学 | 化学方程式、酸碱盐、质量守恒定律、溶液浓度 |
+| 生物 | 细胞结构、遗传规律、生态系统、人体消化 |
+| 历史 | 辛亥革命、工业革命、抗日战争、秦朝统一 |
+| 地理 | 气候类型、经纬网、人口迁移、河流地貌 |
+| 政治 | 公民权利、法治观念、经济生活、责任担当 |
 
 > 想要更贴合教材，请补充：年级、教材版本、章节名、错题照片或原题文字。
 
@@ -122,6 +129,7 @@ cd k12-smart-teacher && python3 scripts/quick_setup.py
 ```
 k12-smart-teacher/
 ├── SKILL.md                    # 核心技能指令文档
+├── QUICKSTART.md               # 快速索引：触发话术、均衡主题、常见问题
 ├── README.md                   # 项目说明（本文件）
 ├── LICENSE                     # MIT 许可证
 ├── scripts/
@@ -130,6 +138,7 @@ k12-smart-teacher/
 │   └── quick_setup.py          # 快速安装脚本(Python)
 ├── references/
 │   ├── math_knowledge.md       # 数学知识点库
+│   ├── balanced_topic_bank.json # 九大学科均衡主题题库索引
 │   ├── subject_identification.md  # 学科识别指南
 │   └── video_resources.md      # 视频资源推荐指南
 └── assets/                     # 资源文件目录

@@ -16,22 +16,14 @@ from pathlib import Path
 
 
 SUPPORTED_SUBJECTS = ["语文", "数学", "英语", "物理", "化学", "生物", "历史", "地理", "政治"]
+SKILL_ROOT = Path(__file__).resolve().parents[1]
+BALANCED_BANK_PATH = SKILL_ROOT / "references" / "balanced_topic_bank.json"
 LEVELS = [
     ("basic", "基础巩固", "⭐"),
     ("improve", "能力提高", "⭐⭐"),
     ("challenge", "拓展挑战", "⭐⭐⭐"),
 ]
-EXAMPLE_TOPICS = {
-    "语文": ["阅读理解", "病句修改", "作文提纲"],
-    "数学": ["最大公因数", "分数应用题", "一次函数"],
-    "英语": ["现在完成时", "一般过去时", "阅读理解"],
-    "物理": ["浮力", "欧姆定律", "牛顿第二定律"],
-    "化学": ["化学方程式", "酸碱盐", "质量守恒定律"],
-    "生物": ["细胞结构", "遗传规律", "生态系统"],
-    "历史": ["辛亥革命", "工业革命", "抗日战争"],
-    "地理": ["气候类型", "经纬网", "人口迁移"],
-    "政治": ["公民权利", "法治观念", "经济生活"],
-}
+EXAMPLE_TOPICS = {}
 
 
 class PaperGenerationError(Exception):
@@ -74,6 +66,22 @@ def topic_has(topic, *keywords):
     return any(keyword.lower() in topic.lower() for keyword in keywords)
 
 
+def load_balanced_bank():
+    try:
+        return json.loads(BALANCED_BANK_PATH.read_text(encoding="utf-8"))
+    except FileNotFoundError:
+        return {}
+    except json.JSONDecodeError as exc:
+        raise PaperGenerationError(f"均衡题库文件格式有误：{BALANCED_BANK_PATH}。请检查JSON格式。") from exc
+
+
+BANK = load_balanced_bank()
+EXAMPLE_TOPICS.update({
+    subject: [item["topic"] for item in BANK.get(subject, [])]
+    for subject in SUPPORTED_SUBJECTS
+})
+
+
 def trim_questions(questions, basic_count, improve_count, challenge_count):
     limits = {
         "basic": max(0, basic_count),
@@ -83,7 +91,137 @@ def trim_questions(questions, basic_count, improve_count, challenge_count):
     return {level: questions.get(level, [])[:limit] for level, limit in limits.items()}
 
 
+def find_topic_profile(subject, topic):
+    topic_lower = topic.lower()
+    for profile in BANK.get(subject, []):
+        candidates = [profile.get("topic", "")] + profile.get("aliases", [])
+        if any(candidate and candidate.lower() in topic_lower for candidate in candidates):
+            return profile
+    return None
+
+
+def generate_profile_questions(subject, topic, profile, basic_count=3, improve_count=3, challenge_count=2):
+    key_points = profile.get("key_points", [])
+    mistakes = profile.get("common_mistakes", [])
+    focus = profile.get("question_focus", "基础理解、方法应用、综合迁移")
+    canonical_topic = profile.get("topic", topic)
+    stage = profile.get("stage", "小学/初中/高中")
+
+    key_text = "、".join(key_points[:4]) if key_points else canonical_topic
+    mistake_text = mistakes[0] if mistakes else "只记结论，没有说明理由"
+    mistake_text_2 = mistakes[1] if len(mistakes) > 1 else mistake_text
+
+    if subject in ["语文", "英语"]:
+        questions = {
+            "basic": [
+                q("核心概念", f"围绕“{canonical_topic}”，写出本题最需要掌握的3个要点：{key_text}。"),
+                q("基础练习", f"完成一道“{canonical_topic}”基础题，并在答案旁标出依据或关键词。"),
+                q("易错辨析", f"判断并说明：学习“{canonical_topic}”时，最容易出现“{mistake_text}”这个问题。"),
+            ],
+            "improve": [
+                q("方法应用", f"按“审题 -> 定位/分析 -> 作答”的顺序完成一道“{canonical_topic}”提高题。", hint=f"题型方向：{focus}。"),
+                q("错题修正", f"给出一个“{canonical_topic}”错误答案，指出错因并改成规范答案。", hint=f"常见错因：{mistake_text_2}。"),
+                q("表达训练", f"用一段完整的话总结“{canonical_topic}”的答题方法，要求有步骤、有例子。"),
+            ],
+            "challenge": [
+                q("综合迁移", f"把“{canonical_topic}”放到一段新材料或新语境中，完成一道综合题并写出评分要点。"),
+                q("自主命题", f"自己设计一道“{canonical_topic}”题目，给出参考答案和两个扣分点。"),
+            ],
+        }
+    elif subject in ["数学", "物理", "化学"]:
+        questions = {
+            "basic": [
+                q("概念填空", f"写出“{canonical_topic}”的核心概念/公式，并说明每个量的含义。", hint=f"重点：{key_text}。"),
+                q("基础计算", f"完成一道“{canonical_topic}”基础计算题，要求写出公式、代入、结果和单位。"),
+                q("判断辨析", f"判断并说明：出现“{mistake_text}”时，解题结果通常不可靠。"),
+            ],
+            "improve": [
+                q("应用题", f"设计一个生活或实验情境，运用“{canonical_topic}”解决问题，并写出完整步骤。"),
+                q("错因分析", f"给出一道“{canonical_topic}”错题，指出错在概念、公式、单位还是条件提取。", hint=f"常见错因：{mistake_text_2}。"),
+                q("方法比较", f"尝试用两种方法解决同一道“{canonical_topic}”题，并说明哪种更适合考试。"),
+            ],
+            "challenge": [
+                q("综合题", f"完成一道同时考查“{canonical_topic}”和另一个相关知识点的综合题。", hint=f"适用学段：{stage}。"),
+                q("实验/探究", f"围绕“{canonical_topic}”设计一个验证或探究方案，写出变量、步骤和结论。"),
+            ],
+        }
+    elif subject == "生物":
+        questions = {
+            "basic": [
+                q("结构/概念", f"解释“{canonical_topic}”中的核心结构或概念，并说明功能。", hint=f"重点：{key_text}。"),
+                q("功能匹配", f"把“{canonical_topic}”相关结构与功能一一对应，至少写出3组。"),
+                q("易错判断", f"判断并说明：出现“{mistake_text}”时，说明概念还没有真正分清。"),
+            ],
+            "improve": [
+                q("比较表", f"用表格比较“{canonical_topic}”中两个容易混淆的概念或结构。"),
+                q("过程排序", f"把“{canonical_topic}”相关生命活动按正确顺序排列，并说明关键变化。"),
+                q("实验分析", f"设计或分析一个观察“{canonical_topic}”的实验，写出材料、步骤、现象和结论。"),
+            ],
+            "challenge": [
+                q("结构与功能", f"从“结构适应功能”的角度解释“{canonical_topic}”中的一个现象。"),
+                q("综合探究", f"围绕“{canonical_topic}”提出一个可探究问题，写出变量、对照组和预期结果。"),
+            ],
+        }
+    elif subject == "历史":
+        questions = {
+            "basic": [
+                q("时间线索", f"整理“{canonical_topic}”的时间、人物/主体和关键事件。", hint=f"重点：{key_text}。"),
+                q("概念解释", f"解释“{canonical_topic}”中的一个核心概念，并用一句史实支撑。"),
+                q("易错判断", f"判断并说明：学习“{canonical_topic}”时，容易出现“{mistake_text}”。"),
+            ],
+            "improve": [
+                q("原因影响", f"从背景、过程、影响中任选两个角度分析“{canonical_topic}”。"),
+                q("史料分析", f"阅读一段关于“{canonical_topic}”的史料，提取观点并找出依据。"),
+                q("比较归纳", f"把“{canonical_topic}”与相近历史事件比较，列出相同点和不同点。"),
+            ],
+            "challenge": [
+                q("历史评价", f"评价“{canonical_topic}”的历史作用，要求兼顾进步性和局限性。"),
+                q("时序迁移", f"把“{canonical_topic}”放入更长历史阶段中，说明它承前启后的意义。"),
+            ],
+        }
+    elif subject == "地理":
+        questions = {
+            "basic": [
+                q("概念识别", f"解释“{canonical_topic}”中的核心地理概念，并标出关键词。", hint=f"重点：{key_text}。"),
+                q("图表判读", f"根据地图、坐标、气温降水图或统计图，提取“{canonical_topic}”相关信息。"),
+                q("易错判断", f"判断并说明：出现“{mistake_text}”时，读图或分析会偏离结论。"),
+            ],
+            "improve": [
+                q("空间定位", f"结合方位、区域或坐标信息，说明“{canonical_topic}”在地图上的判断步骤。"),
+                q("区域比较", f"比较两个区域在“{canonical_topic}”上的差异，并写出自然或人文原因。"),
+                q("图文转换", f"把一段关于“{canonical_topic}”的文字信息转成表格、示意图或步骤清单。"),
+            ],
+            "challenge": [
+                q("综合分析", f"结合区域背景，分析“{canonical_topic}”对生产、生活或环境的影响。"),
+                q("迁移应用", f"换一个陌生区域，说明如何用同样方法分析“{canonical_topic}”。"),
+            ],
+        }
+    else:
+        questions = {
+            "basic": [
+                q("概念解释", f"解释“{canonical_topic}”中的核心观点，并列出2个关键词。", hint=f"重点：{key_text}。"),
+                q("情境判断", f"阅读一个生活情境，判断其中行为是否符合“{canonical_topic}”要求，并说明理由。"),
+                q("易错辨析", f"判断并说明：出现“{mistake_text}”时，说明观点理解还不完整。"),
+            ],
+            "improve": [
+                q("材料分析", f"结合一段社会生活材料，回答“{canonical_topic}”体现了什么观点，并找出材料依据。"),
+                q("做法建议", f"遇到与“{canonical_topic}”相关的问题时，给出3条合法、具体、可执行的做法。"),
+                q("观点辨析", f"对一个关于“{canonical_topic}”的片面观点进行辨析，要求先判断再说明理由。"),
+            ],
+            "challenge": [
+                q("开放论述", f"围绕“{canonical_topic}”写一段150字左右的小论述，要求观点明确、联系生活、结论完整。"),
+                q("行动方案", f"设计一个践行“{canonical_topic}”的小方案，写出目标、步骤和评价标准。"),
+            ],
+        }
+
+    return trim_questions(questions, basic_count, improve_count, challenge_count)
+
+
 def generate_math_questions(topic, grade, basic_count=3, improve_count=3, challenge_count=2):
+    profile = find_topic_profile("数学", topic)
+    if profile and not ("最大公因数" in topic or "公因数" in topic):
+        return generate_profile_questions("数学", topic, profile, basic_count, improve_count, challenge_count)
+
     questions = {"basic": [], "improve": [], "challenge": []}
 
     if "最大公因数" in topic or "公因数" in topic:
@@ -121,6 +259,10 @@ def generate_math_questions(topic, grade, basic_count=3, improve_count=3, challe
 
 
 def generate_chinese_questions(topic, grade, basic_count=3, improve_count=3, challenge_count=2):
+    profile = find_topic_profile("语文", topic)
+    if profile:
+        return generate_profile_questions("语文", topic, profile, basic_count, improve_count, challenge_count)
+
     if topic_has(topic, "阅读", "现代文"):
         questions = {
             "basic": [
@@ -179,6 +321,10 @@ def generate_chinese_questions(topic, grade, basic_count=3, improve_count=3, cha
 
 
 def generate_english_questions(topic, grade, basic_count=3, improve_count=3, challenge_count=2):
+    profile = find_topic_profile("英语", topic)
+    if profile:
+        return generate_profile_questions("英语", topic, profile, basic_count, improve_count, challenge_count)
+
     if topic_has(topic, "现在完成时", "present perfect"):
         questions = {
             "basic": [
@@ -237,6 +383,10 @@ def generate_english_questions(topic, grade, basic_count=3, improve_count=3, cha
 
 
 def generate_science_questions(subject, topic, grade, basic_count=3, improve_count=3, challenge_count=2):
+    profile = find_topic_profile(subject, topic)
+    if profile:
+        return generate_profile_questions(subject, topic, profile, basic_count, improve_count, challenge_count)
+
     if subject == "物理" and topic_has(topic, "浮力"):
         questions = {
             "basic": [
@@ -319,6 +469,10 @@ def generate_science_questions(subject, topic, grade, basic_count=3, improve_cou
 
 
 def generate_humanities_questions(subject, topic, grade, basic_count=3, improve_count=3, challenge_count=2):
+    profile = find_topic_profile(subject, topic)
+    if profile:
+        return generate_profile_questions(subject, topic, profile, basic_count, improve_count, challenge_count)
+
     if subject == "历史" and topic_has(topic, "辛亥革命"):
         questions = {
             "basic": [
@@ -428,7 +582,7 @@ def build_output_data(args, questions):
         "grade": args.grade,
         "stage": detect_stage(args.grade),
         "questions": questions,
-        "usage_note": "数学和常见知识点会优先使用专项模板；其他主题使用基础模板生成，正式给孩子使用前建议老师或家长快速浏览一遍。"
+        "usage_note": "九大学科均衡题库中的主题会优先生成三层梯度练习；其他主题使用学科兜底模板，正式给孩子使用前建议老师或家长快速浏览一遍。"
     }
 
 
